@@ -59,7 +59,7 @@ if uploaded_file is not None:
 
 # Side bar for additional controls
 max_words = st.sidebar.slider("Number of words", 5, 100, 50, 5)
-color_scheme = st.sidebar.selectbox("Text color", options=['black', 'Colorful'])
+color_scheme = st.sidebar.selectbox("Text colour", options=['Black text', 'Colourful text'])
 text_case = st.sidebar.radio("Text case", ('Upper case', 'Lower case'))
 additional_stop_words = st.sidebar.text_input("Additional stop words", value='').split(',')
 
@@ -72,4 +72,4 @@ if st.button('Generate Word Cloud'):
     generate_word_cloud(text_input, max_words, color_scheme, text_case, additional_stop_words)
 
 # Download button (not fully implemented)
-# Here you need to implement the function to convert the generated word cloud to a PNG and download it
+
