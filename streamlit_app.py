@@ -64,7 +64,7 @@ if uploaded_file is not None:
 
 # Sidebar for additional controls
 max_words = st.sidebar.slider("Number of words", 5, 100, 50, 5)
-color_scheme = st.sidebar.selectbox("Text color", options=['black', 'Colorful'])
+color_scheme = st.sidebar.selectbox("Text colour", options=['Black text', 'Colourful text'])
 text_case = st.sidebar.radio("Text case", ('Upper case', 'Lower case'))
 additional_stop_words = st.sidebar.text_input("Additional stop words", value='').split(',')
 
@@ -82,5 +82,3 @@ def get_image_download_link(img):
 
 if 'last_img' in st.session_state:
     st.markdown(get_image_download_link(st.session_state['last_img']), unsafe_allow_html=True)
-
-
