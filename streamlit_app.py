@@ -3,19 +3,20 @@ from wordcloud import WordCloud, STOPWORDS
 import matplotlib.pyplot as plt
 from nltk.tokenize import word_tokenize
 import pandas as pd
-from PIL import Image
 import numpy as np
+import base64
 from io import BytesIO
+import random
+import nltk
 
 # Required for text processing in NLTK
-import nltk
 nltk.download('punkt')
 
 # Function to generate a color based on the "Colorful" option
 def random_color_func(word=None, font_size=None, position=None, orientation=None, font_path=None, random_state=None):
     h = random_state.randint(0, 360)
-    s = int(random_state.rand() * 100)
-    l = int(random_state.rand() * 100)
+    s = random_state.randint(70, 100)
+    l = random_state.randint(40, 90)
     return f"hsl({h}, {s}%, {l}%)"
 
 # Function to generate word cloud
@@ -35,7 +36,7 @@ def generate_word_cloud(text, max_words, color_scheme, text_case, additional_sto
         width=800,
         height=400,
         max_words=max_words,
-        color_func=random_color_func if color_scheme == 'Colorful' else None,
+        color_func=random_color_func if color_scheme == 'Colorful' else lambda *args, **kwargs: "black",
         background_color='white'
     ).generate(' '.join(tokens))
 
@@ -43,7 +44,15 @@ def generate_word_cloud(text, max_words, color_scheme, text_case, additional_sto
     plt.figure(figsize=(10, 5))
     plt.imshow(wordcloud, interpolation='bilinear')
     plt.axis("off")
-    st.pyplot(plt)
+    
+    # Save the plot to a BytesIO object to display and download
+    buf = BytesIO()
+    plt.savefig(buf, format='png')
+    buf.seek(0)
+    st.image(buf)
+    
+    # Return the buffer to use for the download link
+    return buf
 
 # Streamlit app layout
 st.title('Word Cloud Generator')
@@ -70,15 +79,11 @@ additional_stop_words = st.sidebar.text_input("Additional stop words", value='')
 
 # Button to generate word cloud
 if st.button('Generate Word Cloud'):
-    generate_word_cloud(text_input, max_words, color_scheme, text_case, additional_stop_words)
-
-# Download button
-def get_image_download_link(img):
-    buffered = BytesIO()
-    img.save(buffered, format="PNG")
-    img_str = base64.b64encode(buffered.getvalue()).decode()
-    href = f'<a href="data:file/png;base64,{img_str}" download="wordcloud.png">Download PNG</a>'
-    return href
-
-if 'last_img' in st.session_state:
-    st.markdown(get_image_download_link(st.session_state['last_img']), unsafe_allow_html=True)
+    buf = generate_word_cloud(text_input, max_words, color_scheme, text_case, additional_stop_words)
+    # Create a download link for the generated word cloud
+    st.sidebar.download_button(
+        label="Download PNG",
+        data=buf,
+        file_name="wordcloud.png",
+        mime="image/png"
+    )
