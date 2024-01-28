@@ -6,12 +6,15 @@ from nltk.tokenize import word_tokenize
 import io
 import base64
 import pandas as pd
+from PIL import ImageColor
+import random
 
 # Initialize NLTK resources
 nltk.download('punkt')
 
 # Function to generate word cloud
-def generate_word_cloud(text, max_words, color_scheme, text_case, additional_stop_words):
+def generate_word_cloud(text, max_words, color_scheme, text_case, additional_stop_words, streamlit_app):
+
     # Tokenization
     tokens = word_tokenize(text)
 
@@ -25,12 +28,21 @@ def generate_word_cloud(text, max_words, color_scheme, text_case, additional_sto
     elif text_case == 'Lower case':
         tokens = [word.lower() for word in tokens]
 
+    # Color function for colorful scheme
+    def random_color_func(word=None, font_size=None, position=None, orientation=None, font_path=None, random_state=None):
+        h = int(random_state.randint(0, 360))
+        s = int(random_state.randint(60, 100))
+        l = int(random_state.randint(30, 70))
+        return "hsl({}, {}%, {}%)".format(h, s, l)
+
+    color_func = random_color_func if color_scheme == 'Colorful' else None
+
     # Generate word cloud
     wordcloud = WordCloud(
         width=800,
         height=400,
         max_words=max_words,
-        color_func=(lambda *args, **kwargs: color_scheme) if color_scheme != 'black' else None,
+        color_func=color_func,
         background_color='white'
     ).generate(' '.join(tokens))
 
@@ -38,7 +50,8 @@ def generate_word_cloud(text, max_words, color_scheme, text_case, additional_sto
     plt.figure(figsize=(10, 5))
     plt.imshow(wordcloud, interpolation='bilinear')
     plt.axis("off")
-    plt.show()
+    plt.tight_layout()
+    st.pyplot(plt)
 
 # Streamlit app layout
 st.title('Word Cloud Generator')
