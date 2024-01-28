@@ -65,11 +65,16 @@ uploaded_file = st.file_uploader("Or upload your data (.csv or .txt)", type=['cs
 
 # Process uploaded file
 if uploaded_file is not None:
-    if uploaded_file.type == "text/csv":
-        df = pd.read_csv(uploaded_file)
-        text_input = ' '.join(df.iloc[:, 0].astype(str).tolist())
-    elif uploaded_file.type == "text/plain":
-        text_input = uploaded_file.read().decode('utf-8')
+    try:
+        if uploaded_file.type == "text/csv":
+            df = pd.read_csv(uploaded_file)
+            # Drop rows with NaN values to prevent 'NaN' in word cloud
+            df.dropna(inplace=True)
+            text_input = ' '.join(df.iloc[:, 0].astype(str).tolist())
+        elif uploaded_file.type == "text/plain":
+            text_input = uploaded_file.read().decode('utf-8')
+    except Exception as e:
+        st.error(f"An error occurred: {e}")
 
 # Sidebar for additional controls
 max_words = st.sidebar.slider("Number of words", 5, 100, 50, 5)
