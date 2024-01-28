@@ -36,7 +36,7 @@ def generate_word_cloud(text, max_words, color_scheme, text_case, additional_sto
         width=800,
         height=400,
         max_words=max_words,
-        color_func=random_color_func if color_scheme == 'Colourful text' else lambda *args, **kwargs: "Black text",
+        color_func=random_color_func if color_scheme == 'Colourful text' else lambda *args, **kwargs: "black",
         background_color='white'
     ).generate(' '.join(tokens))
 
