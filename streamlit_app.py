@@ -12,7 +12,7 @@ import nltk
 # Required for text processing in NLTK
 nltk.download('punkt')
 
-# Function to generate a color based on the "Colourful" option
+# Function to generate a color based on the "Colorful" option
 def random_color_func(word=None, font_size=None, position=None, orientation=None, font_path=None, random_state=None):
     h = random_state.randint(0, 360)
     s = random_state.randint(70, 100)
@@ -78,7 +78,7 @@ if uploaded_file is not None:
 
 # Sidebar for additional controls
 max_words = st.sidebar.slider("Number of words", 5, 100, 50, 5)
-color_scheme = st.sidebar.selectbox("Text color", options=['Black text', 'Colourful text'])
+color_scheme = st.sidebar.selectbox("Text color", options=['black', 'Colorful'])
 text_case = st.sidebar.radio("Text case", ('Upper case', 'Lower case'))
 additional_stop_words_input = st.sidebar.text_input("Additional stop words", value='')
 
