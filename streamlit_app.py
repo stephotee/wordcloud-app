@@ -12,7 +12,7 @@ import nltk
 # Required for text processing in NLTK
 nltk.download('punkt')
 
-# Function to generate a color based on the "Colorful" option
+# Function to generate a color based on the "Colourful" option
 def random_color_func(word=None, font_size=None, position=None, orientation=None, font_path=None, random_state=None):
     h = random_state.randint(0, 360)
     s = random_state.randint(70, 100)
@@ -36,7 +36,7 @@ def generate_word_cloud(text, max_words, color_scheme, text_case, additional_sto
         width=800,
         height=400,
         max_words=max_words,
-        color_func=random_color_func if color_scheme == 'Colorful' else lambda *args, **kwargs: "black",
+        color_func=random_color_func if color_scheme == 'Colourful text' else lambda *args, **kwargs: "black",
         background_color='white'
     ).generate(' '.join(tokens))
 
