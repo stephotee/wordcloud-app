@@ -78,9 +78,12 @@ if uploaded_file is not None:
 
 # Sidebar for additional controls
 max_words = st.sidebar.slider("Number of words", 5, 100, 50, 5)
-color_scheme = st.sidebar.selectbox("Text colour", options=['Black text', 'Colourful text'])
+color_scheme = st.sidebar.selectbox("Text color", options=['black', 'Colorful'])
 text_case = st.sidebar.radio("Text case", ('Upper case', 'Lower case'))
-additional_stop_words = st.sidebar.text_input("Additional stop words", value='').split(',')
+additional_stop_words_input = st.sidebar.text_input("Additional stop words", value='')
+
+# Process the additional stop words, removing any spaces around the words
+additional_stop_words = [word.strip() for word in additional_stop_words_input.split(',') if word.strip()]
 
 # Button to generate word cloud
 if st.button('Generate Word Cloud'):
